@@ -14,7 +14,7 @@ import { hostname } from 'node:os'
 
 import { SwitchBotBLEModel, SwitchBotBLEModelFriendlyName, SwitchBotBLEModelName, SwitchBotModel } from 'node-switchbot'
 
-import { formatDeviceIdAsMac, sleep } from '../utils.js'
+import { formatDeviceIdAsMac, safeStringify, sleep } from '../utils.js'
 
 export abstract class deviceBase {
   public readonly api: API
@@ -315,7 +315,7 @@ export abstract class deviceBase {
     // Set an event handler
     let serviceData = { model: this.device.bleModel, modelName: this.device.bleModelName } as ad['serviceData']
     switchbot.onadvertisement = (ad: ad) => {
-      this.debugLog(`ad: ${JSON.stringify(ad, null, '  ')}`)
+      this.debugLog(`ad: ${safeStringify(ad)}`)
       if (this.device.bleMac === ad.address && ad.serviceData.model === this.device.bleModel) {
         this.debugLog(`${JSON.stringify(ad, null, '  ')}`)
         this.debugLog(`address: ${ad.address}, model: ${ad.serviceData.model}`)
